@@ -129,14 +129,14 @@ minetest.register_privilege("multihome", {
 -- [chatcommand] /multihome
 minetest.register_chatcommand("multihome", {
   description = "Teleport you to a home point",
-  params = "<action> <home name> | <set, remove, go>, <home name>",
+  params = "<action> <home name> | <set, del, go>, <home name>",
   privs = {multihome=true},
   func = function(name, params)
     local params = params:split(" ")
 
     if #params == 2 and params[1] == "set" then
       return multihome.set(name, params[2])
-    elseif #params == 2 and params[1] == "remove" then
+    elseif #params == 2 and params[1] == "del" then
       return multihome.remove(name, params[2])
     elseif #params == 2 and params[1] == "go" then
       return multihome.go(name, params[2])
