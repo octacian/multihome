@@ -4,6 +4,7 @@ MultiHome [multihome]
 =====================
 - GitHub: https://github.com/octacian/multihome
 - Download: https://github.com/octacian/multihome/archive/master.zip
+- Forum: https://forum.minetest.net/viewtopic.php?f=9&t=17587
 
 MultiHome is a Minetest mod allowing players to set multiple homes rather than just one home through Minetest Game's sethome mod. MultiHome supports limiting the max number of homes per-player (default: 5) and has two compatibility layers to allow working with sethome. The chatcommands made available by MultiHome depend on the compatibility mode chosen, as shown below.
 
