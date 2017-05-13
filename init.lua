@@ -149,7 +149,7 @@ if compat == "none" or compat == "deprecate" then
   -- [chatcommand] /multihome
   minetest.register_chatcommand("multihome", {
     description = "Manage your home points",
-    params = "<action> <home name> | <set, del, go>, <home name>",
+    params = "<action> <home name> | <set, del, go, list>, <home name>",
     privs = {multihome=true},
     func = function(name, params)
       local params = params:split(" ")
