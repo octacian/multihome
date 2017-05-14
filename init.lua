@@ -11,6 +11,28 @@ if not minetest.get_modpath("sethome") then
 end
 
 ---
+--- Load old homes from the homes file
+---
+
+local homes_file = minetest.get_worldpath() .. "/homes"
+local oldhomes   = {}
+
+local function old_loadhomes()
+  local input = io.open(homes_file, "r")
+	if not input then
+		return -- no longer an error
+	end
+
+	-- Iterate over all stored positions in the format "x y z player" for each line
+	for pos, name in input:read("*a"):gmatch("(%S+ %S+ %S+)%s([%w_-]+)[\r\n]") do
+		oldhomes[name] = minetest.string_to_pos(pos)
+	end
+	input:close()
+end
+
+old_loadhomes()
+
+---
 --- API
 ---
 
@@ -126,13 +148,17 @@ minetest.register_on_joinplayer(function(player)
   check_attr(player)
 
   -- Check if homes need to be imported
-  if import == "true" and compat == "deprecate" or compat == "override" then
-    local pos = minetest.string_to_pos(player:get_attribute("sethome:home"))
+  if import == "true" and (compat == "deprecate" or compat == "override")
+      and player:get_attribute("multihome:imported") ~= "true" then
+    local name = player:get_player_name()
+    local pos = minetest.string_to_pos(player:get_attribute("sethome:home")) or oldhomes[name]
     if pos then
       -- Set multihome entry
       multihome.set(player, "default", pos)
       -- Clear attribute
       player:set_attribute("sethome:home", nil)
+      -- Set imported attribute
+      player:set_attribute("multihome:imported", "true")
     end
   end
 end)
