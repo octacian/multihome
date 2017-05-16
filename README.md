@@ -15,6 +15,8 @@ MultiHome provides exactly two compatibility modes allowing the mod to work with
 
 The first two compatibility modes use the same chatcommand (`/multihome`) as documented below, however, `deprecate` overrides chatcommands from sethome causing them to display a message stating that they are deprecated and `/multihome` should be used instead. __Note:__ If a compatibility mode is set and the sethome mod is not found, compatibility is automatically set to `none`.
 
+When attempting to vist a home using any compatibility mode, if the player does not specify a home to teleport to and they only have one home, the player will be automatically teleported to that home.
+
 #### Compatibility: None/Deprecate
 Both the `none` and `deprecate` compatibility modes use the same chatcommand, however `deprecate` adds deprecation messages as mentioned above. The best way to learn how to use this `/multihome` chatcommand is to use the in-game help, `/help multihome`, however, an overview of the usage can be found below.
 

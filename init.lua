@@ -98,6 +98,25 @@ function multihome.get(player, name)
   return homes[name]
 end
 
+-- [function] Get player's default home
+function multihome.get_default(player)
+  if type(player) == "string" then
+    player = minetest.get_player_by_name(player)
+  end
+
+  local default
+  local count = 0
+  local homes = minetest.deserialize(player:get_attribute("multihome"))
+  for home, pos in pairs(homes) do
+    count = count + 1
+    default = home
+  end
+
+  if count == 1 then
+    return default
+  end
+end
+
 -- [function] List homes
 function multihome.list(player)
   if type(player) == "string" then
@@ -182,8 +201,16 @@ if compat == "none" or compat == "deprecate" then
         return multihome.set(name, params[2])
       elseif #params == 2 and params[1] == "del" then
         return multihome.remove(name, params[2])
-      elseif #params == 2 and params[1] == "go" then
-        return multihome.go(name, params[2])
+      elseif params[1] == "go" then
+        local home = params[2]
+        if not home then
+          home = multihome.get_default(name)
+          if not home then
+            return false, "Invalid parameters (see /help multihome)"
+          end
+        end
+
+        return multihome.go(name, home)
       elseif params[1] == "list" then
         return multihome.list(name)
       else
@@ -221,6 +248,11 @@ if compat == "override" then
       if param and param ~= "" then
         return multihome.go(name, param)
       else
+        local home = multihome.get_default(name)
+        if home then
+          return multihome.go(name, home)
+        end
+
         return false, "Invalid parameters (see /help home)"
       end
     end,

@@ -20,6 +20,12 @@ The MultiHome mod provides a simplistic API allowing creation, deletion, access,
 * `player`: PlayerRef
 * `name`: Home name
 
+`multihome.get_default(player)`
+
+* Returns a "default" home if the player has only one home set
+* Allows the player to be automatically teleported without specifying the home name
+* `player`: PlayerRef
+
 `multihome.list(player)`
 
 * List a player's homes in format suitable for chat
