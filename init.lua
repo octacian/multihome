@@ -155,8 +155,6 @@ minetest.register_on_joinplayer(function(player)
     if pos then
       -- Set multihome entry
       multihome.set(player, "default", pos)
-      -- Clear attribute
-      player:set_attribute("sethome:home", nil)
       -- Set imported attribute
       player:set_attribute("multihome:imported", "true")
     end
