@@ -242,7 +242,7 @@ if compat == "override" then
 
 	-- [override] /home
 	minetest.override_chatcommand("home", {
-		description = "Teleport you to one of your home points",
+		description = "Teleport you to one of your home points (related: /sethome, /delhome, /listhomes)",
 		params = "<home name>",
 		func = function(name, param)
 			if param and param ~= "" then
@@ -253,14 +253,14 @@ if compat == "override" then
 					return multihome.go(name, home)
 				end
 
-				return false, "Invalid parameters (see /help home)"
+				return false, "Invalid parameters (see /help home or /listhomes)"
 			end
 		end,
 	})
 
 	-- [override] /sethome
 	minetest.override_chatcommand("sethome", {
-		description = "Set or update one of your home points",
+		description = "Set or update one of your home points (related: /home, /delhome, /listhomes)",
 		params = "<home name>",
 		func = function(name, param)
 			if param and param ~= "" then
@@ -273,21 +273,21 @@ if compat == "override" then
 
 	-- [chatcommand] /delhome
 	minetest.register_chatcommand("delhome", {
-		description = "Delete one of your home points",
+		description = "Delete one of your home points (related: /home, /sethome, /listhomes)",
 		params = "<home name>",
 		privs = {home=true},
 		func = function(name, param)
 			if param and param ~= "" then
 				return multihome.remove(name, param)
 			else
-				return false, "Invalid parameters (see /help delhome)"
+				return false, "Invalid parameters (see /help delhome or /listhomes)"
 			end
 		end,
 	})
 
 	-- [chatcommand] /listhomes
 	minetest.register_chatcommand("listhomes", {
-		description = "List all of your home points",
+		description = "List all of your home points (related: /home, /sethome, /delhome)",
 		privs = {home=true},
 		func = function(name)
 			return multihome.list(name)
