@@ -63,7 +63,7 @@ function multihome.set(player, name, pos)
 
 	-- Check for space
 	if count_homes(homes) >= max then
-		return false, "Too many homes. Remove one with /multihome remove <name>"
+		return false, "Too many homes. Remove one with /multihome del <name> or /delhome <name>"
 	end
 
 	homes[name] = pos
@@ -150,7 +150,7 @@ function multihome.go(player, name)
 	else
 		local homes = minetest.deserialize(player:get_attribute("multihome"))
 		if not homes then
-			return false, "Set a home using /multihome set"
+			return false, "Set a home using /multihome set <name> or /sethome <name>"
 		else
 			return false, "Invalid home \""..name.."\""
 		end
