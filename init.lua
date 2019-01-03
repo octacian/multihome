@@ -61,8 +61,8 @@ function multihome.set(player, name, pos)
 	local pos   = pos or vector.round(player:getpos())
 	local homes = minetest.deserialize(player:get_attribute("multihome"))
 
-	-- Check for space
-	if count_homes(homes) >= max then
+	-- if home doesn't already exist (i.e. a new home is being created), check for space
+	if not homes[name] and count_homes(homes) >= max then
 		return false, "Too many homes. Remove one with /multihome del <name> or /delhome <name>"
 	end
 
