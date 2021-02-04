@@ -2,11 +2,26 @@
 
 multihome = {}
 
-local max    = minetest.setting_get("multihome.max") or 5
-local compat = minetest.setting_get("multihome.compatibility") or "none"
-local import = minetest.setting_get("multihome.import") or "false"
+-- Load settings from minetest.conf, else set to default values
+local max    = tonumber(minetest.settings:get("multihome.max")) or 5
+local compat = minetest.settings:get("multihome.compatibility") or "none"
+local import = minetest.settings:get("multihome.import") or "false"
 
-if not minetest.get_modpath("sethome") then
+-- Out of range is always bad, so log as error
+if max < 2 or max > 10000 then
+	minetest.log("error", "multihome.max value of " .. dump(max) .. " in minetest.conf is outside of 2 - 10000 range. Resetting to 5.")
+	max = 5
+end
+
+-- Any other value is always bad, so log as error
+if compat ~= "none" and compat ~= "deprecate" and compat ~= "override" then
+	minetest.log("error", "multihome.compatibility value of '" .. compat .. "' in minetest.conf is invalid. Valid values are: none (default), deprecate, or override. Resetting to 'none'.")
+	compat = "none"
+end
+
+-- The "sethome" mod can differ per world, so log as warning
+if compat ~= "none" and not minetest.get_modpath("sethome") then
+	minetest.log("warning", "multihome.compatibility value of '" .. compat .. "' in minetest.conf is invalid when sethome mod not present. Resetting to 'none'.")
 	compat = "none"
 end
 
@@ -60,10 +75,14 @@ function multihome.set(player, name, pos)
 
 	local pos   = pos or vector.round(player:getpos())
 	local homes = minetest.deserialize(player:get_attribute("multihome"))
+	local home_count = count_homes(homes)
 
-	-- if home doesn't already exist (i.e. a new home is being created), check for space
-	if not homes[name] and count_homes(homes) >= tonumber(max) then
-		return false, "Too many homes. Remove one with /multihome del <name> or /delhome <name>"
+	-- If home doesn't already exist (i.e. a new home is being created), check for space.
+	-- Else, if count > max (should only happen if max gets lowered), indicate how many to remove.
+	if not homes[name] and home_count == max then
+		return false, "Error: too many homes. Replace one by reusing an existing name, or remove one with /multihome del <name> or /delhome <name>"
+	elseif home_count > max then
+		return false, "Error: too many homes. Remove at least " .. dump(home_count - max) .. " with /multihome del <name> or /delhome <name>"
 	end
 
 	homes[name] = pos
